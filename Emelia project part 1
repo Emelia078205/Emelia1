@@ -1,0 +1,35 @@
+def add_grade(student_id, subject, grade):
+    if student_id in students:
+        if 0 <= grade <= 100:
+            students[student_id]["grades"][subject] = grade
+    else:
+        print("Student not found")
+
+def calc_average(student_id):
+    grades = students[student_id]["grades"].values()
+    if len(grades) == 0:
+        return 0
+    return sum(grades) / len(grades)
+
+def get_letter_grade(avg):
+    if avg >= 90:
+        return "A"
+    elif avg >= 80:
+        return "B"
+    elif avg >= 70:
+        return "C"
+    elif avg >= 60:
+        return "D"
+    elif avg >= 50:
+        return "D-"
+    else:
+        return "F"
+
+students = {}
+
+name = input("Enter student name: ")
+
+students[name] = {
+    "name": name,
+    "grades": {}
+}
