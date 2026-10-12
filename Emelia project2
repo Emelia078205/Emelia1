@@ -1,0 +1,123 @@
+port os
+ileName= "list.txt"
+asks = []
+ef load_tasks():
+    if not os.path.exists(FileName)
+    return
+with open(FileName, "r", encoding="utf-8") as file:
+    for line in file:
+        line= linr.strip()
+        if line:
+            parts = line.split("|")
+            if len(parts)==3
+            task_id , title, status
+            tasks.append({
+                "id": int(task_id),
+                "title": title,
+                "status": status
+            })
+def save_tasks():
+    with open(FileName, "w", encoding="utf-8")
+
+    for task im tasks:
+        file.write(f"{task['id']}|{task['title']}\n")
+
+def add_task():
+    title=input("add new task:").strip()
+
+    if not title:
+        print("no task without title")
+        return
+    new_id = len(tasks) + 1
+
+    task = {
+        "id"= new_id,
+        "title":title,
+        "status" : "Pending"
+    }
+
+
+    tasks.append(task)
+    save_task()
+    print(f"the{title}is added")
+    def display_tasks():
+
+        if not tasks:
+            print("its not available")
+            return
+status_txt = "done"if task["status"]== "completed" else "waiting"
+
+print(f"{task['id']}, {task['status_txt']}, {task['tittle']}")
+def task_completed():
+    display_tasks()
+    if not tasks:
+        return
+    try:
+        task_id = int(input("Enter the num of task thay you finishrd"))
+        found=False
+
+        for task in tasks:
+            if task["id"]==task_id:
+                task["status"] == "Completed"
+                found = True
+                save_tasks()
+                print(f"task '{title}' is saved")
+                break
+
+        if not found:
+            print("The task is not found")
+    except ValueError:
+        print("Plz enter the correct number")
+
+def delete_task():
+    display_task()
+    if not task:
+        return
+
+    try:
+        task_id= int(input("Enter the task id:"))
+        found=False
+
+        for task in tasks:
+            if task["id"] == task_id:
+                found=True
+                save_tasks()
+                print("The task is deleted")
+                break
+
+        if not found:
+            print("The task is not found")
+exept ValueError:
+    print("Plz enter the correct number")
+
+exept ValueError:
+    print("Plz enter the correct number")
+
+def main_menu:
+    load_tasks()
+    while True:
+        print("The list")
+        print("1.display tasks")
+        print("2.add tasks")
+        print("3.task as done")
+        print("4.delet tasks")
+        print("5.exsit")
+
+        choices = input("(5-1) choose :").strip()
+
+        if choices == "1":
+            display_tasks()
+        elif choices == "2":
+            add_task()
+        elif choices == "3":
+            mark_completed()
+        elif choices == "4":
+            delete_task()
+        elif choices == "5":
+            print("exsit done and the tasks are saved, good luck!")
+            break
+
+        else:
+            print("Try again")
+
+main_menu()
