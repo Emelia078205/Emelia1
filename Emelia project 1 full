@@ -1,0 +1,149 @@
+Import csv
+
+students = {}
+
+def add_student(student_id, name):
+    if student_id in students:
+        print(f"Error: Student ID {student_id} already exists.")
+    else:
+        students[student_id] = {'name': name, 'grades': {}}
+        print(f"Student '{name}' added successfully.")
+
+def list_all_students():
+    if not students:
+        print("No students currently registered.")
+        return
+    print("All Students")
+    for student_id, info in students.items():
+        print(f"ID: {student_id} | Name: {info['name']}")
+
+def add_grade(student_id, subject, grade):
+    if student_id not in students:
+        print(f"Error: Student ID {student_id} not found.")
+        return
+    
+    if 0 <= grade <= 100:
+        students[student_id]["grades"][subject] = grade
+        print(f"Grade added for {subject}: {grade}")
+    else:
+        print("Error: Grade must be between 0 and 100.")
+
+def calc_average(student_id):
+    if student_id not in students:
+        return 0
+    grades = students[student_id]["grades"].values()
+    if len(grades) == 0:
+        return 0
+    return sum(grades) / len(grades)
+
+def get_letter_grade(avg):
+    if avg >= 90:
+        return "A"
+    elif avg >= 80:
+        return "B"
+    elif avg >= 70:
+        return "C"
+    elif avg >= 60:
+        return "D"
+    elif avg >= 50:
+        return "D-"
+    else:
+        return "F"
+
+def display_transcript(student_id):
+    if student_id not in students:
+        print(f"Error: Student ID {student_id} not found.")
+        return
+    
+    info = students[student_id]
+    avg = calc_average(student_id)
+    letter = get_letter_grade(avg)
+    
+    print(f"Student Transcript: {info['name']} (ID: {student_id})")
+    if info['grades']:
+        for subject, grade in info['grades'].items():
+            print(f"  {subject}: {grade}")
+    else:
+        print("  No grades entered yet.")
+    print(f"Average: {avg:.2f}")
+    print(f"Letter Grade: {letter}")
+
+def save_to_csv(filename="students.csv"):
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(["student_id", "name", "subject", "grade"])
+        for student_id, info in students.items():
+            if info['grades']:
+                for subject, grade in info['grades'].items():
+                    writer.writerow([student_id, info['name'], subject, grade])
+            else:
+                writer.writerow([student_id, info['name'], "", ""])
+    print("Data successfully saved to CSV file.")
+
+def load_from_csv(filename="students.csv"):
+    global students
+    try:
+        with open(filename, mode='r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            students = {}
+            for row in reader:
+                student_id = row["student_id"]
+                name = row["name"]
+                subject = row["subject"]
+                grade = row["grade"]
+                
+                if student_id not in students:
+                    students[student_id] = {'name': name, 'grades': {}}
+                if subject and grade != "":
+                    students[student_id]['grades'][subject] = float(grade)
+        print("Data successfully loaded from CSV file.")
+    except FileNotFoundError:
+        print("CSV file not found, starting with an empty database.")
+
+def main():
+    load_from_csv() 
+    
+    while True:
+        print("Student Grade Management System")
+        print("1. Add a new student")
+        print("2. Add a grade for a student")
+        print("3. Display a student's transcript")
+        print("4. List all students")
+        print("5. Save data to CSV")
+        print("6. Exit")
+        
+        choice = input("Select an option (1-6): ")
+        
+        if choice == '1':
+            student_id = input("Enter Student ID: ")
+            name = input("Enter Student Name: ")
+            add_student(student_id, name)
+            
+        elif choice == '2':
+            student_id = input("Enter Student ID: ")
+            subject = input("Enter Subject Name: ")
+            try:
+                grade = float(input("Enter Grade (0-100): "))
+                add_grade(student_id, subject, grade)
+            except ValueError:
+                print("Error: Please enter a valid numerical grade.")
+                
+        elif choice == '3':
+            student_id = input("Enter Student ID: ")
+            display_transcript(student_id)
+            
+        elif choice == '4':
+            list_all_students()
+            
+        elif choice == '5':
+            save_to_csv()
+            
+        elif choice == '6':
+            save_to_csv() 
+            print("Thank you for using the system. Exiting...")
+            break
+        else:
+            print("Invalid option, please try again.")
+
+if __name__ == "__main__":
+    main()
